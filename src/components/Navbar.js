@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom"
 import { useContext } from "react"
 import ContextApi from "../context/ContextApi.js"
+
 const Navbar = () => {
 
-    const { jwtToken } = useContext(ContextApi)
-    console.log(jwtToken)
+    const { jwtToken, onLogout } = useContext(ContextApi)
 
 
 
@@ -27,11 +27,17 @@ const Navbar = () => {
                 <button type="button">
                     <Link to="/assignments" className="text-md text-gary-400 font-semibold cursor-pointer hover:text-gray-700">Assignments</Link>
                 </button>
-                <Link to="/login">
-                    <button type="button" className="text-white bg-blue-500 px-6 py-2 rounded-md cursor-pointer text-sm font-bold ">
-                        Login
-                    </button>
-                </Link>
+                {
+                    jwtToken === "" ? <Link to="/login">
+                        <button type="button" className="text-white bg-blue-500 px-6 py-2 rounded-md cursor-pointer text-sm font-bold ">
+                            Login
+                        </button>
+                    </Link> :
+                        <button type="button" onClick={onLogout} className="text-white bg-red-500 px-6 py-2 rounded-md cursor-pointer text-sm font-bold ">
+                            Logout
+                        </button>
+
+                }
 
             </div>
         </div>

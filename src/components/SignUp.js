@@ -1,33 +1,36 @@
 import axios from "axios"
 import { useContext, useState } from "react"
 import { Link } from "react-router-dom"
-import Cookies from "js-cookie"
 import ContextApi from "../context/ContextApi.js"
 import { TailSpin } from "react-loader-spinner"
 import { toast } from "react-toastify"
-
-const Login = () => {
-
-    const { backendUrl, setJwtToken, navigate } = useContext(ContextApi)
+const SignUp = () => {
+    const roles = [
+        "Admin",
+        "Commander",
+        "Officer"
+    ]
+    const { backendUrl } = useContext(ContextApi)
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    const [role, setRole] = useState(roles[0])
     const [isLoader, setIsLoader] = useState(false)
-    const onSubmitLogin = async (e) => {
+    const onSubmitSignUp = async (e) => {
         try {
-            setIsLoader(true)
+
             e.preventDefault()
+            setIsLoader(true)
 
 
-            const response = await axios.post(`${backendUrl}/api/user/login`, {
-                username, password
+
+            const response = await axios.post(`${backendUrl}/api/user/sign-up`, {
+                username, password, role
             })
 
-            const newToken = response.data.jwt_token
-            setJwtToken(newToken)
-            Cookies.set("jwt_token", newToken, { expires: 1 })
-            navigate("/")
+            console.log(response.data)
+            toast.success(response.data.success)
+
             setIsLoader(false)
-            toast.success("Login successful")
 
         } catch (e) {
             setIsLoader(false)
@@ -37,6 +40,7 @@ const Login = () => {
             else if (e.response.status === 400) {
                 toast.error("input filelds are required")
             }
+
         }
     }
 
@@ -47,8 +51,8 @@ const Login = () => {
 
         <div className="p-3  flex flex-col justify-center items-center">
             <div className="shadow-md w-100 p-5">
-                <h1 className="text-center font-semibold font-bold text-xl">Login</h1>
-                <form onSubmit={onSubmitLogin}>
+                <h1 className="text-center font-semibold font-bold text-xl">Sign Up</h1>
+                <form onSubmit={onSubmitSignUp}>
                     <div className="my-3">
                         <label htmlFor="username" className="text-gray-700 font-semibold text-md">Username</label>
                         <div className="w-full border-1 rounded-md">
@@ -63,11 +67,21 @@ const Login = () => {
                                 className="text-gray-500 w-full px-2 py-1 outline-none " placeholder="Enter your password" />
                         </div>
                     </div>
+                    <div className="my-3 flex flex-col">
+                        <label htmlFor="password" className="text-gray-700 font-semibold text-md">Role</label>
+                        <select className="w-full border-1 rounded-md outline-none px-2 py-1 " value={role} onChange={(e) => setRole(e.target.value)} >
+                            {
+                                roles.map((item) => (
+                                    <option key={item}>{item}</option>
+                                ))
+                            }
+                        </select>
+                    </div>
                     <div className="my-3 flex justify-center">
                         {
                             !isLoader ? <div>
                                 <button type="submit" className="text-white bg-blue-500 px-6 py-2 rounded-md cursor-pointer text-sm font-bold ">
-                                    Login
+                                    Sign Up
                                 </button>
                             </div> : <div>
                                 <TailSpin type="TailSpin" width={30} height={30} color="blue" />
@@ -75,7 +89,7 @@ const Login = () => {
                         }
                     </div>
                     <div>
-                        <Link to="/signup" className="text-blue-500 text-sm font-bold"  >Sign Up</Link>
+                        <Link to="/login" className="text-blue-500 text-sm font-bold"  >Login</Link>
                     </div>
                 </form>
 
@@ -87,4 +101,4 @@ const Login = () => {
 }
 
 
-export default Login
+export default SignUp
