@@ -1,14 +1,16 @@
 import axios from "axios"
 import { useContext, useState } from "react"
 import ContextApi from "../context/ContextApi.js"
-
+import { TailSpin } from "react-loader-spinner"
 const Login = () => {
 
-    const { backendUrl } = useContext(ContextApi)
+    const { backendUrl, setJwtToken, jwtToken } = useContext(ContextApi)
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    const [isLoader, setIsLoader] = useState(false)
     const onSubmitLogin = async (e) => {
         try {
+            setIsLoader(true)
             console.log("onSubmit Login")
             e.preventDefault()
 
@@ -16,9 +18,15 @@ const Login = () => {
             const response = await axios.post(`${backendUrl}/api/user/login`, {
                 username, password
             })
-            console.log(response.data)
+            console.log(response.data, jwtToken)
+
+            const newToken = response.data.jwt_token
+            setJwtToken(newToken)
+            setIsLoader(true)
 
         } catch (e) {
+            setIsLoader(true)
+
             console.log(e.message)
         }
     }
@@ -45,9 +53,15 @@ const Login = () => {
                         </div>
                     </div>
                     <div className="my-3 flex justify-center">
-                        <button type="submit" className="text-white bg-blue-500 px-6 py-2 rounded-md cursor-pointer text-sm font-bold ">
-                            Login
-                        </button>
+                        {
+                            !isLoader ? <div>
+                                <button type="submit" className="text-white bg-blue-500 px-6 py-2 rounded-md cursor-pointer text-sm font-bold ">
+                                    Login
+                                </button>
+                            </div> : <div>
+                                <TailSpin type="TailSpin" width={30} height={30} color="blue" />
+                            </div>
+                        }
                     </div>
                 </form>
 

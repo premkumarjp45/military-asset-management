@@ -1,5 +1,11 @@
 import { Link } from "react-router-dom"
+import { useContext } from "react"
+import ContextApi from "../context/ContextApi.js"
 const Navbar = () => {
+
+    const { jwtToken } = useContext(ContextApi)
+    console.log(jwtToken)
+
 
 
     return (
