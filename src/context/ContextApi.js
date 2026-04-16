@@ -1,5 +1,4 @@
 import { createContext } from "react"
-import Cookie from "js-cookie"
 
 
 const ContextApi = createContext({})
