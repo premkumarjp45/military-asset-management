@@ -78,6 +78,7 @@ export const loginUsers = async (req, res) => {
     username = username.trim()
     password = password.trim()
 
+    console.log(username, password)
     if (!username && !password) {
         return res.status(400).json({ error: "Required fields missing" })
     }
