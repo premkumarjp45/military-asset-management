@@ -14,7 +14,9 @@ app.use("/api/user", user)
 app.use("/api", purchases)
 app.use("/api/trans", transfers)
 
-
+app.get("/", (req, res) => {
+    res.send("API WORKING")
+})
 
 
 
