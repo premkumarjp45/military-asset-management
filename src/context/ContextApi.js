@@ -11,6 +11,11 @@ export const ContextApiProvider = (props) => {
     const [jwtToken, setJwtToken] = useState('')
     const navigate = useNavigate()
 
+
+
+
+
+
     useEffect(() => {
 
         const getJwt = Cookies.get("jwt_token") || ""
@@ -18,22 +23,19 @@ export const ContextApiProvider = (props) => {
     }, [])
 
 
-    const loginUser = async ({ username, password }) => {
-        console.log("Login")
 
-    }
 
 
     const onLogout = () => {
         Cookies.remove("jwt_token")
-        setJwtToken("/")
+        setJwtToken("")
         navigate("/login")
     }
 
     return (
         <ContextApi.Provider value={{
             name: "premkumar",
-            loginUser,
+
             backendUrl,
             jwtToken,
             setJwtToken,
